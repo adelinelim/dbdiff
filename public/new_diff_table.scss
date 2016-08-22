@@ -1,0 +1,55 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  margin-left: 30px;
+}
+
+div {
+  margin-bottom: 20px;
+}
+
+select {
+  -webkit-appearance: button;
+  -webkit-border-radius: 2px;
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  -webkit-user-select: none;
+  background-image: url(images/dropdown.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+  background-position: 97% center;
+  background-repeat: no-repeat;
+  border: 1px solid #AAA;
+  color: #555;
+  font-size: inherit;
+  margin: 0 20px;
+  overflow: hidden;
+  padding: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 300px;
+}
+
+.sub-title-type {
+  margin-right: 8px;
+}
+
+.btn-submit {
+  color: #28aadc;
+  background-color: #fff;
+  font-size: 15px;
+  border-radius: 13px;
+  padding: 10px 20px;
+  border: .2rem solid #28aadc;
+  -webkit-transition: color .3s,border .3s;
+  transition: color .3s,border .3s;
+  cursor:pointer;
+  margin-right: 20px;
+}
+
+.buttons-group {
+  margin-top: 40px;
+}
+
+a {
+  text-decoration: none;
+}

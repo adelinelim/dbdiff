@@ -1,0 +1,15 @@
+fulcrum_development:
+  database: fulcrum_development
+  host: localhost
+  username: root
+  password:
+
+booster_data:
+  database: booster_data
+  host: localhost
+  username: root
+  password:
+
+default:
+  host: localhost
+  username: root
