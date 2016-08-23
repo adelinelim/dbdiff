@@ -398,31 +398,3 @@ def compare_modification_without_primary_key(tables_1, tables_2, action, diff)
     end
   end
 end
-
-# diff shape
-# {
-#   "campaigns": {
-#     addition: [{id: 13, url_key: 'itsonus', content: "lala 1"}],
-#     modifications: [
-#       {
-#         id: 8,
-#         row_modification: {
-#           url_key: {from: '', to: ''},
-#           content: {from: '', to: ''}
-#         }
-#       }
-#     ],
-#     deletions: [...]
-#   },
-#   "orders": {
-#     deleteTable: true,
-#     deletion: [....]
-#   },
-#   "ordeaars": {
-#     addedTable: true,
-#     addition: [....]
-#   }
-# }
-
-# TODO:
-# 1. refactor
