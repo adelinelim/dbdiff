@@ -6,22 +6,27 @@ DBDiff supports these database adapters:
 - postgres
 
 # Setup
-clone dbdiff to your machine
-  1. run bundle install
+Clone dbdiff to your machine and run bundle install in Terminal
+```
+bundle install
+```
 
 # Usage
   1) Go to the cloned folder in Terminal
 ```
 cd dbdiff
 ```
-  2) Run the server_work
+
+  2) Run the server_work in Terminal
 ```
 ruby server_work.rb
 ```
+
   3) When the Sinatra service is running, open the browser with the link:
 ```
 http://localhost:4567/setup
 ```
+
   4) Click **Add Connection** button to add database connection.
 
   Fill in the database connection detail and click **Add** button.
@@ -31,6 +36,5 @@ http://localhost:4567/setup
 
   6) You can now view the data differences after some CRUD actions to the database.
 
-### Note:
-
+# Note:
   DBdiff will always compare the last two json files, located in data/*.json folder to generate the data differences result.
