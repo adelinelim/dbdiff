@@ -17,9 +17,9 @@ bundle install
 cd dbdiff
 ```
 
-  2) Run the server_work in Terminal
+  2) Run the dbdiff in Terminal
 ```
-ruby server_work.rb
+ruby dbdiff.rb
 ```
 
   3) When the Sinatra service is running, open the browser with the link:
@@ -36,5 +36,18 @@ http://localhost:4567/setup
 
   6) You can now view the data differences after some CRUD actions to the database.
 
-# Note:
-  DBdiff will always compare the last two json files, located in data/*.json folder to generate the data differences result.
+  7) You can refresh or click compare again to compare the continuous data
+
+# How it works:
+1. Everytime when you clicked the "**Compare**" button, it will write all the data from database into <.filenumber>.json file.
+
+  The file number counter is stored in .filenumber, it is an auto generated number.
+
+2.  DBdiff will always compares the last two <.filenumber>.json files (located in data/*.json folder) to generate the data differences result into data/diff.json.
+
+  Example
+  ```
+  write data into: <filenumber>.json
+  compare: compare 1.json with 2.json
+  then generate: diff.json
+  ```
