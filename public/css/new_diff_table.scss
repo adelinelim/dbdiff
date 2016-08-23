@@ -44,6 +44,7 @@ select {
   transition: color .3s,border .3s;
   cursor:pointer;
   margin-right: 20px;
+  width: 100px;
 }
 
 .buttons-group {
@@ -52,4 +53,33 @@ select {
 
 a {
   text-decoration: none;
+}
+
+.error {
+  color: red;
+}
+
+.top-gap {
+  margin-top: 20px;
+}
+
+input {
+  -webkit-border-radius: 2px;
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  border: 1px solid #AAA;
+  color: #555;
+  font-size: inherit;
+  margin: 0 20px;
+  padding: 10px;
+  width: 300px;
+}
+
+.add_connection_view {
+  input {
+    position: absolute !important;
+    margin-left: 60px !important;
+    margin-top: -10px !important;
+  }
 }

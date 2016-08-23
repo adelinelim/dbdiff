@@ -95,20 +95,7 @@ end
 get "/add" do
   "saving..."
   if params.present?
-    all_dbs_config = Configuration::DatabaseConfigFile.read
-    id = params["name"]
-
-    if all_dbs_config[id].blank?
-      all_dbs_config[id] = {}
-    end
-
-    params.each do |k, v|
-      if v.present? && k != "name"
-        all_dbs_config[id][k] = v
-      end
-    end
-
-    Configuration::DatabaseConfigFile.write(all_dbs_config)
+    Configuration::DatabaseConfigFile.new(params).write_to_db_config
     redirect "/setup"
   else
     "No database connection to add"
@@ -125,96 +112,96 @@ end
 
 get "/compare" do
   if params.empty? || params[:cid].empty?
-    return "need to select a database"
-  end
-
-  adapter = Adapters::Factory.new(params[:cid]).create
-
-  table_names = adapter.get_all_tables_names
-
-  tables = {}
-
-  table_names.each do |t|
-    table_name = t["table_name"].to_sym
-    # retrieve data from table
-    tables[table_name] = {}
-    tables[table_name][:data] = adapter.get_table_data(table_name)
-
-    # get primary key of each table
-    primary_key = adapter.get_primary_key(table_name)
-
-    primary_key_value = primary_key.try(:first).try(:[], "column_name")
-
-    tables[table_name][:primary_key] = primary_key_value
-
-    if primary_key_value
-      tables[table_name][:indices] = create_index(tables[table_name][:data], primary_key_value)
-    else
-      tables[table_name][:indices] = {}
-    end
-  end
-
-  data = {
-    action_name: params[:action_name].presence || "default",
-    tables: tables
-  }.to_pj
-
-  # write data into json file
-  filenumber_name = ".filenumber"
-  number = File.read(filenumber_name)
-  incre_number = number.to_i + 1
-  File.write("data/#{incre_number}.json", data)
-  File.write(filenumber_name, incre_number)
-
-  all_files = Dir["data/*"]
-  # sort all the data json files name
-  sorted_nos = all_files.map do |f|
-    filenum = f.split('/').last.split('.').first
-    if filenum.is_i?
-      filenum.to_i
-    end
-  end.compact.sort
-
-  if sorted_nos.size > 1
-    # Always read last 2 files
-    # Read File 1
-    file1 = "data/#{sorted_nos[-2]}.json"
-    compare_1 = File.read(file1).to_data.deep_symbolize_keys
-    t1 = compare_1[:tables]
-
-    # Read File 2
-    file2 = "data/#{sorted_nos[-1]}.json"
-    compare_2 = File.read(file2).to_data.deep_symbolize_keys
-    t2 = compare_2[:tables]
-
-    # data comparison
-    diff = {}
-    # compare table's row add or deletion
-    compare_tables_for_modification(t1, t2, :deletion, diff)
-    compare_tables_for_modification(t2, t1, :addition, diff)
-
-    # compare add table or delete table
-    compare_tables_for_add_delete(t1, t2, :deletion, diff)
-    compare_tables_for_add_delete(t2, t1, :addition, diff)
-
-    # compare row modification with same primary_key
-    compare_rows_for_modification(t1, t2, diff)
-
-    # compare data without primary_key
-    compare_modification_without_primary_key(t1, t2, :deletion, diff)
-    compare_modification_without_primary_key(t2, t1, :addition, diff)
-
-    # filter empty diff result
-    filtered_diff = filtered_diff_data(diff)
-
-    # write filtered diff to file
-    File.write("data/diff.json", filtered_diff.to_pj)
-
-    # filtered_diff = File.read("data/diff.json").to_data.deep_symbolize_keys
-    # display in table html format
-    diff_in_html(filtered_diff, file1, file2, params)
+    erb :'no_database_selected_view'
   else
-    redirect "/setup"
+    adapter = Adapters::Factory.new(params[:cid]).create
+
+    table_names = adapter.get_all_tables_names
+
+    tables = {}
+
+    table_names.each do |t|
+      table_name = t["table_name"].to_sym
+      # retrieve data from table
+      tables[table_name] = {}
+      tables[table_name][:data] = adapter.get_table_data(table_name)
+
+      # get primary key of each table
+      primary_key = adapter.get_primary_key(table_name)
+
+      primary_key_value = primary_key.try(:first).try(:[], "column_name")
+
+      tables[table_name][:primary_key] = primary_key_value
+
+      if primary_key_value
+        tables[table_name][:indices] = create_index(tables[table_name][:data], primary_key_value)
+      else
+        tables[table_name][:indices] = {}
+      end
+    end
+
+    data = {
+      action_name: params[:action_name].presence || "default",
+      tables: tables
+    }.to_pj
+
+    # write data into json file
+    filenumber_name = ".filenumber"
+    number = File.read(filenumber_name)
+    incre_number = number.to_i + 1
+    File.write("data/#{incre_number}.json", data)
+    File.write(filenumber_name, incre_number)
+
+    all_files = Dir["data/*"]
+    # sort all the data json files name
+    sorted_nos = all_files.map do |f|
+      filenum = f.split('/').last.split('.').first
+      if filenum.is_i?
+        filenum.to_i
+      end
+    end.compact.sort
+
+    if sorted_nos.size > 1
+      # Always read last 2 files
+      # Read File 1
+      file1 = "data/#{sorted_nos[-2]}.json"
+      compare_1 = File.read(file1).to_data.deep_symbolize_keys
+      t1 = compare_1[:tables]
+
+      # Read File 2
+      file2 = "data/#{sorted_nos[-1]}.json"
+      compare_2 = File.read(file2).to_data.deep_symbolize_keys
+      t2 = compare_2[:tables]
+
+      # data comparison
+      diff = {}
+      # compare table's row add or deletion
+      compare_tables_for_modification(t1, t2, :deletion, diff)
+      compare_tables_for_modification(t2, t1, :addition, diff)
+
+      # compare add table or delete table
+      compare_tables_for_add_delete(t1, t2, :deletion, diff)
+      compare_tables_for_add_delete(t2, t1, :addition, diff)
+
+      # compare row modification with same primary_key
+      compare_rows_for_modification(t1, t2, diff)
+
+      # compare data without primary_key
+      compare_modification_without_primary_key(t1, t2, :deletion, diff)
+      compare_modification_without_primary_key(t2, t1, :addition, diff)
+
+      # filter empty diff result
+      filtered_diff = filtered_diff_data(diff)
+
+      # write filtered diff to file
+      File.write("data/diff.json", filtered_diff.to_pj)
+
+      # filtered_diff = File.read("data/diff.json").to_data.deep_symbolize_keys
+      # display in table html format
+      diff_in_html(filtered_diff, file1, file2, params)
+    else
+      redirect "/setup"
+    end
   end
 end
 

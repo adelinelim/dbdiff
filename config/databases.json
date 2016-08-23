@@ -1,12 +1,2 @@
 {
-  "fulcrum local": {
-    "adapter": "mysql",
-    "database": "fulcrum_development",
-    "host": "localhost",
-    "username": "root"
-  },
-  "postgres test": {
-    "adapter": "pg",
-    "database": "postgres"
-  }
 }
