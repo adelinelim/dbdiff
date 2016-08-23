@@ -95,7 +95,7 @@ end
 get "/add" do
   "saving..."
   if params.present?
-    all_dbs_config = Configuration::DatabaseFile.read_database_config_file
+    all_dbs_config = Configuration::DatabaseConfigFile.read
     id = params["name"]
 
     if all_dbs_config[id].blank?
@@ -108,7 +108,7 @@ get "/add" do
       end
     end
 
-    Configuration::DatabaseFile.write_to_database_config_file(all_dbs_config)
+    Configuration::DatabaseConfigFile.write(all_dbs_config)
     redirect "/setup"
   else
     "No database connection to add"
@@ -116,7 +116,7 @@ get "/add" do
 end
 
 get "/setup" do
-  all_dbs_config = Configuration::DatabaseFile.read_database_config_file
+  all_dbs_config = Configuration::DatabaseConfigFile.read
   all_databases_select_tag = Components::ComboBox.new(
     select: {id: "all_databases"}, option: all_dbs_config.keys
   ).render
