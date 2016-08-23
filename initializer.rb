@@ -15,6 +15,10 @@ Dir[File.dirname(__FILE__) + "/components/*.rb"].each do |file|
   require_relative file
 end
 
-# Dir[File.dirname(__FILE__) + "/services/*.rb"].each do |file|
-#   require_relative file
-# end
+Dir[File.dirname(__FILE__) + "/adapters/*.rb"].each do |file|
+  require_relative file
+end
+
+Dir[File.dirname(__FILE__) + "/configuration/*.rb"].each do |file|
+  require_relative file
+end

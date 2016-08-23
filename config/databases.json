@@ -6,7 +6,7 @@
     "username": "root"
   },
   "postgres test": {
-    "adapter": "postgres",
+    "adapter": "pg",
     "database": "postgres"
   }
 }

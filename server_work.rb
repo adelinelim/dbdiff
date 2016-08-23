@@ -1,91 +1,6 @@
 require "sinatra"
 require "sinatra/reloader"
-require "mysql2"
-require "pry"
-require "rubygems"
-require "active_support/all"
-require "pg"
-require "yaml"
-require "hashie"
-
-def read_db_yaml(type, database)
-  configs = YAML::load_file("config/#{type}_database.yml")[database.to_s]
-end
-
-def initialize_db_conn(db_type, database)
-  config = read_db_yaml(db_type, database)
-  if config.present?
-    if db_type.to_sym == :pg
-      # PG::Connection.new(dbname: "postgres")
-      PG::Connection.new(config)
-    elsif db_type.to_sym == :mysql
-      # Mysql2::Client.new(host: "localhost", username: "root")
-      Mysql2::Client.new(config)
-    else
-      raise "The database type is not support"
-    end
-  else
-    raise "Need to set the database connection in *.yml files"
-  end
-end
-
-class Hash
-  def to_pj
-    JSON.pretty_generate(self)
-  end
-
-  def to_hpj
-    "<pre>" + to_pj + "</pre>"
-  end
-
-  def to_str
-    # to_hpj
-    to_pj
-  end
-
-  def to_s
-    # to_hpj
-    to_pj
-  end
-
-  def +(other)
-    to_str + other.to_str
-  end
-end
-
-class Array
-  def to_pj
-    JSON.pretty_generate(self)
-  end
-
-  def to_hpj
-    "<pre>" + to_pj + "</pre>"
-  end
-
-  def to_str
-    # to_hpj
-    to_pj
-  end
-
-  def to_s
-    # to_hpj
-    to_pj
-  end
-end
-
-class String
-  def to_data
-    JSON.parse(self)
-  end
-
-  def color(code)
-    "\e[38;5;#{code}m#{self}\e[0m"
-  end
-
-  def is_i?
-    /\A[-+]?\d+\z/ === self
-  end
-end
+require_relative "initializer"
 
 def compare_one_table(a, b)
   a[:indices].map do |id, i|
@@ -173,144 +88,49 @@ def compare_tables_for_add_delete(t1, t2, action, diff)
   end
 end
 
-def get_databases_select_tag(type, database_name)
-  conn = initialize_db_conn(type, database_name)
-  result = yield(conn)
-  databases = result.map do |row|
-    row["database_name"]
-  end
-  generate_select_tag(databases, type)
-end
-
-def generate_select_tag(list, id)
-  option = ""
-  list.each do |db|
-    option += "<option value='#{db}'>#{db}</option>"
-  end
-  "<select hidden='true' id='#{id}'>#{option}</select>"
-end
-
 get "/add_connection" do
-  # dbname: postgres
-  # host: localhost
-  # port: 5432
-  # user:
-  # password:
+  erb :'add_connection_view'
+end
+
+get "/add" do
+  "saving..."
+  if params.present?
+    all_dbs_config = Configuration::DatabaseFile.read_database_config_file
+    id = params["name"]
+
+    if all_dbs_config[id].blank?
+      all_dbs_config[id] = {}
+    end
+
+    params.each do |k, v|
+      if v.present? && k != "name"
+        all_dbs_config[id][k] = v
+      end
+    end
+
+    Configuration::DatabaseFile.write_to_database_config_file(all_dbs_config)
+    redirect "/setup"
+  else
+    "No database connection to add"
+  end
 end
 
 get "/setup" do
-  mysql_select_tag = get_databases_select_tag(:mysql, :default) do |conn|
-    query = "SELECT DISTINCT table_schema AS database_name FROM information_schema.tables"
-    conn.query(query).to_a
-  end
-
-  pg_select_tag = get_databases_select_tag(:pg, :default) do |conn|
-    query = "SELECT datname AS database_name FROM pg_database WHERE datistemplate = false"
-    conn.exec(query).to_a
-  end
-  mysql_db = YAML::load_file("config/databases.yml")
-  # pg_db = YAML::load_file("config/databases.yml")
-
-  puts mysql_db
-  # puts pg_db
-
-  %[
-    <link rel="stylesheet" href="new_diff_table.scss" type="text/css" />
-    <script src="jquery.min.js" type="text/javascript"></script>
-    <script src="dbdiff.js" type="text/javascript"></script>
-
-    <h2>Setup Database Connection</h2>
-    <div>
-      <span class="sub-title-type">Database Type:</span>
-      <select id="db_type">
-        <option value="pg">postgres</option>
-        <option value="mysql">mysql</option>
-      </select>
-    </div>
-
-    <div>
-      <span class="db_type_title">Database Name:</span>
-      #{pg_select_tag}
-      #{mysql_select_tag}
-    </div>
-
-    <input type="hidden" id="parameters" name="parameters">
-    <div class="buttons-group">
-      <a href="/compare" id="compare" class="btn-submit">Compare</a>
-      <a href="/add_connection" id="add_connection_btn" class="btn-submit">Add Connection</a>
-    </div>
-  ]
-
-  # <form action="/compare" method="get">
-  #   <input id="compare" type="submit" class="btn-submit" value="Compare">
-  # </form>
-end
-
-def get_tables_names(type, database, conn)
-  # get all tables name and ignore views
-  sql = %[
-    SELECT table_name
-    FROM information_schema.tables
-    WHERE table_type = 'BASE TABLE'
-  ]
-  if type.to_sym == :pg
-    sql += %[
-      AND table_schema = 'public'
-      AND table_catalog = '#{database}';
-    ]
-    conn.exec(sql)
-  else
-    sql += "AND table_schema = '#{database}';"
-    conn.query(sql)
-  end
-end
-
-def get_primary_key(type, database, table, conn)
-  # get primary key of table
-  sql = %[
-    SELECT k.column_name
-    FROM information_schema.table_constraints t
-    JOIN information_schema.key_column_usage k
-    USING(constraint_name,table_schema,table_name)
-    WHERE t.constraint_type='PRIMARY KEY'
-  ]
-  if type.to_sym == :pg
-      sql += %[
-      AND t.table_schema='public'
-      AND t.table_name='#{table}'
-      AND t.table_catalog = '#{database}';
-    ]
-    conn.exec(sql)
-  else
-    sql += %[
-      AND t.table_schema='#{database}'
-      AND t.table_name='#{table}';
-    ]
-    conn.query(sql)
-  end
-end
-
-def get_table_data(type, table_name, conn)
-  # retrieve data from table
-  sql = "SELECT * FROM #{table_name}"
-  if type.to_sym == :pg
-    conn.exec(sql)
-  else
-    conn.query(sql)
-  end
+  all_dbs_config = Configuration::DatabaseFile.read_database_config_file
+  all_databases_select_tag = Components::ComboBox.new(
+    select: {id: "all_databases"}, option: all_dbs_config.keys
+  ).render
+  erb :'setup_view', locals: { all_databases: all_databases_select_tag }
 end
 
 get "/compare" do
-  if params[:parameters].empty?
-    raise "no parameters!"
+  if params.empty? || params[:cid].empty?
+    return "need to select a database"
   end
 
-  db_params = Hashie::Mash.new(JSON.parse(params[:parameters]))
-  type = db_params.db_type
-  database = db_params.database
+  adapter = Adapters::Factory.new(params[:cid]).create
 
-  conn = initialize_db_conn(type, database)
-  table_names = get_tables_names(type, database, conn).to_a
+  table_names = adapter.get_all_tables_names
 
   tables = {}
 
@@ -318,10 +138,10 @@ get "/compare" do
     table_name = t["table_name"].to_sym
     # retrieve data from table
     tables[table_name] = {}
-    tables[table_name][:data] = get_table_data(type, table_name, conn).to_a
+    tables[table_name][:data] = adapter.get_table_data(table_name)
 
     # get primary key of each table
-    primary_key = get_primary_key(type, database, table_name, conn).to_a
+    primary_key = adapter.get_primary_key(table_name)
 
     primary_key_value = primary_key.try(:first).try(:[], "column_name")
 
@@ -348,8 +168,6 @@ get "/compare" do
 
   all_files = Dir["data/*"]
   # sort all the data json files name
-  # sorted_nos = all_files.map {|f| f.split('/').last.split('.').first.to_i }.sort
-
   sorted_nos = all_files.map do |f|
     filenum = f.split('/').last.split('.').first
     if filenum.is_i?
@@ -393,15 +211,11 @@ get "/compare" do
     File.write("data/diff.json", filtered_diff.to_pj)
 
     # filtered_diff = File.read("data/diff.json").to_data.deep_symbolize_keys
-    # file1 = "test"
-    # file2 = "test2"
     # display in table html format
     diff_in_html(filtered_diff, file1, file2, params)
   else
     redirect "/setup"
   end
-
-  # diff_in_html(nil, "", "", params)
 end
 
 # to filter empty modification, deletion or addition for diff result
@@ -421,19 +235,17 @@ def filtered_diff_data(diff_data)
 end
 
 def diff_in_html(diff_data, file_name1, file_name2, params)
-  # <input id="compare" type="submit" class="btn-submit" value="Compare">
-
   encoded_params = params.map do |k,v|
     "#{URI::encode(k)}=#{URI::encode(v)}"
   end.join('&')
 
   display = %[
-    <link rel="stylesheet" href="new_diff_table.scss" type="text/css" />
-    <link rel="stylesheet" href="new_table.scss" type="text/css" />
-    <script src="jquery.min.js" type="text/javascript"></script>
-    <script src="dbcompare.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="css/new_diff_table.scss" type="text/css" />
+    <link rel="stylesheet" href="css/new_table.scss" type="text/css" />
+    <script src="javascript/jquery.min.js" type="text/javascript"></script>
+    <script src="javascript/dbcompare.js" type="text/javascript"></script>
     <div class="table-title">Compare File 1: "<b>#{file_name1}</b>" and File 2: "<b>#{file_name2}</b>"</div>
-    <input type="hidden" id="parameters" name="parameters" value='#{params[:parameters]}'>
+    <input type="hidden" id="cid" name="cid" value='#{params[:cid]}'>
     <a href="/setup" class="btn-submit back">Back</a>
     <a href="/compare?#{encoded_params}" class="btn-submit back">Compare</a>
   ]
