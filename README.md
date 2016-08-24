@@ -1,23 +1,25 @@
 # DBDiff
-DBDiff is a tool that allows you to compare data in the database after some CRUD actions.
+  DBDiff is a tool that allows you to compare data in the database after some CRUD actions.
+
+  It is useful to **compare** the state of the data **before and after** an action has been taken.
 
 DBDiff supports these database adapters:
-- mysql
-- postgres
+- **mysql**
+- **postgres**
 
 # Setup
-  Clone dbdiff to your machine and run bundle install in Terminal
+  Clone dbdiff to your machine and run bundle install in Terminal.
   ```
   bundle install
   ```
 
 # Usage
-  1. Go to the cloned folder in Terminal
+  1. Go to the cloned folder in Terminal.
   ```
   cd dbdiff
   ```
 
-  2. Run the dbdiff in Terminal
+  2. Run the dbdiff in Terminal.
   ```
   ruby dbdiff.rb
   ```
@@ -36,18 +38,22 @@ DBDiff supports these database adapters:
 
   6. You can now view the data differences after some CRUD actions to the database.
 
-  7. You can press refresh (command + R) or click **Compare** button again to compare the data continuously.
+  7. You can press refresh (**command + R**) or click **Compare** button again to compare the data continuously.
 
-# How it works:
-1. Everytime when you click the "**Compare**" button, it will write all the data from database into <.filenumber>.json file.
+# How it works
+1. Everytime the "**Compare**" button is clicked in the /compare page, it will write all the data from database into <.filenumber>.json file.
 
-  The file number counter is stored in .filenumber, it is an auto generated number.
+  The file number counter is auto generated and stored in .filenumber file.
 
 2.  DBdiff will always compares the last two <.filenumber>.json files (located in data/*.json folder) to generate the data differences result into data/diff.json.
 
   Example:
   ```
-  write data into: <filenumber>.json
-  compare: compare 1.json with 2.json
-  then generate: diff.json
+  The background processes:
+  1. Write new changes into: 2.json
+  2. Compare the saved files: compare previous data (1.json) with new generated data (2.json)
+  3. Generate differences in diff.json
+  4. Display differences in page
   ```
+
+  **Note:** You can delete unwanted json data files in /data/<.filenumber>.json file

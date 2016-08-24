@@ -1,0 +1,23 @@
+{
+  "campaigns": {
+    "deletion": [
+      {
+        "id": 1,
+        "name": "Testing",
+        "website": "www.testing.com"
+      },
+      {
+        "id": 2,
+        "name": "Testing 2",
+        "website": "www.testing2.com"
+      }
+    ],
+    "addition": [
+      {
+        "id": 3,
+        "name": "Testing 3",
+        "website": "www.testing3.com"
+      }
+    ]
+  }
+}
