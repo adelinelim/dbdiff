@@ -32,7 +32,12 @@ get "/compare" do
     Services::DataGenerator.new(params).generate
     diff_generator = Services::DiffGenerator.new
     diff_generator.generate
-    table_data_diff = Services::DiffViewer.new(diff_generator.get_filtered_diff).generate
+    table_data_diff = ""
+    if diff_generator.has_two_data_files?
+      table_data_diff = Services::DiffViewer.new(diff_generator.get_filtered_diff).generate
+    else
+      table_data_diff = "The first data file is generated, click Compare button again to generate another data file to compare"
+    end
     erb :'compare_view', locals: {
       diff_data: diff_data_params,
       file_names:  diff_generator.get_data_files_names,

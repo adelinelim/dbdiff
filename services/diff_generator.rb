@@ -3,12 +3,14 @@ module Services
     def initialize
       @data_file_names = {}
       @filtered_diff = {}
+      @sorted_nos = []
     end
 
     def generate
       save_differences_into_json
     end
 
+    #need to run generate function before the belows
     def get_data_files_names
       @data_file_names
     end
@@ -17,27 +19,27 @@ module Services
       @filtered_diff
     end
 
+    def has_two_data_files?
+      @sorted_nos = sorted_data_file_number
+      @sorted_nos.size > 1
+    end
+
     private
 
-    def set_data_files_names(sorted_nos)
+    def set_data_files_names
       @data_file_names = Hashie::Mash.new({
-        first_file: "#{sorted_nos[-2]}.json",
-        second_file: "#{sorted_nos[-1]}.json"
+        first_file: "#{@sorted_nos[-2]}.json",
+        second_file: "#{@sorted_nos[-1]}.json"
       })
     end
 
-    def has_two_data_files?(sorted_nos)
-      sorted_nos.size > 1
-    end
-
     def save_differences_into_json
-      sorted_nos = sorted_data_file_number
-      if has_two_data_files?(sorted_nos)
-        set_data_files_names(sorted_nos)
+      if has_two_data_files?
+        set_data_files_names
         # Read File 1 => second last file
-        t1 = read_data_file(sorted_nos[-2])
+        t1 = read_data_file(@sorted_nos[-2])
         # Read File 2 => last file
-        t2 = read_data_file(sorted_nos[-1])
+        t2 = read_data_file(@sorted_nos[-1])
         @filtered_diff = DataComparison.new(t1, t2).generate
       end
     end

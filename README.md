@@ -57,3 +57,12 @@ DBDiff supports these database adapters:
   ```
 
   **Note:** You can delete unwanted json data files in /data/<.filenumber>.json file
+
+## Limitation
+  1. Slow in processing large data
+  2. Displaying differences in a better layout
+
+## Improvement
+  1. Refine UI
+  2. Improve the speed of data comparison
+  3. Refactor code
