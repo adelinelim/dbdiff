@@ -1,18 +1,29 @@
 module Services
   class DiffViewer
-    def initialize(diff_data)
-      @diff_data = diff_data
+    def initialize(diff_generator)
+      @diff_data = diff_generator.get_filtered_diff
+      @has_two_data_files = diff_generator.has_two_data_files?
     end
 
     def generate
-      if @diff_data.present?
-        display_diff
+      if @has_two_data_files
+        if @diff_data.present?
+          display_diff
+        else
+          display_no_changes
+        end
       else
-        display_no_changes
+        display_no_data_file_message
       end
     end
 
     private
+
+    def display_no_data_file_message
+      "There is no previous data file to compare, "\
+      "you will need to click Compare button again "\
+      "to generate the next data file to start the data comparison."
+    end
 
     def display_no_changes
       %[

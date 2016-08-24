@@ -40,12 +40,14 @@ DBDiff supports these database adapters:
 
   7. You can press refresh (**command + R**) or click **Compare** button again to compare the data continuously.
 
+  **Note:** For the first time, in order to compare differences between before and after some actions, you will need to click Compare button again to generate another data json file to start the data comparison.
+
 # How it works
 1. Everytime the "**Compare**" button is clicked in the /compare page, it will write all the data from database into <.filenumber>.json file.
 
   The file number counter is auto generated and stored in .filenumber file.
 
-2.  DBdiff will always compares the last two <.filenumber>.json files (located in data/*.json folder) to generate the data differences result into data/diff.json.
+2.  DBdiff will always compares the last two <.filenumber>.json files (located at data/*.json folder) to generate the data differences result into data/diff.json.
 
   Example:
   ```
@@ -53,7 +55,7 @@ DBDiff supports these database adapters:
   1. Write new changes into: 2.json
   2. Compare the saved files: compare previous data (1.json) with new generated data (2.json)
   3. Generate differences in diff.json
-  4. Display differences in page
+  4. Display differences to the page
   ```
 
   **Note:** You can delete unwanted json data files in /data/<.filenumber>.json file
