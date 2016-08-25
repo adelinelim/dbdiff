@@ -26,11 +26,9 @@ module Services
     end
 
     def display_no_changes
-      %[
-        <div class="table-title">
-        <h3>No changes</h3>
-        </div>
-      ]
+      Components::Div.new(class: "table-title") do |d|
+        d.tag(tag: "h3", content: "No changes")
+      end
     end
 
     def display_diff
