@@ -44,7 +44,6 @@ select {
   transition: color .3s,border .3s;
   cursor:pointer;
   margin-right: 20px;
-  width: 100px;
 }
 
 .buttons-group {
@@ -74,13 +73,4 @@ input {
   font-size: inherit;
   margin: 0 20px;
   padding: 10px;
-  width: 300px;
-}
-
-.add_connection_view {
-  input {
-    position: absolute !important;
-    margin-left: 60px !important;
-    margin-top: -10px !important;
-  }
 }

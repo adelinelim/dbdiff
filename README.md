@@ -53,8 +53,3 @@ DBDiff supports these database adapters:
 ## Limitation
   1. Slow in processing large data
   2. Displaying differences in a better layout
-
-## Improvement
-  1. Refine UI
-  2. Improve the performance of data comparison
-  3. Refactor code

@@ -3,7 +3,7 @@ module Components
     def initialize(options = {})
       super
       @content = options[:content] || ""
-      @attributes = options[:attributes] || options
+      @attributes = options[:attributes] || options.except(:content)
     end
 
     def render

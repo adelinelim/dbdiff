@@ -1,5 +1,5 @@
 module Components
-  class Div < BaseComponent
+  class TableHeader < BaseComponent
     def initialize(options = {})
       super
       @content = options[:content] || ""
@@ -7,21 +7,13 @@ module Components
     end
 
     def render
-      "<div#{render_attributes}>#{@content}#{render_children}</div>"
+      "<th#{render_attributes}>#{@content}</th>"
     end
-
-    private
 
     def render_attributes
       @attributes.map do |k, v|
         " #{k}='#{v}'"
       end.join
-    end
-
-    def render_children
-      @children.map do |child|
-        child.render
-      end.join("\n")
     end
   end
 end

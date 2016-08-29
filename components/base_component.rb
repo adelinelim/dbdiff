@@ -49,6 +49,18 @@ module Components
     def combo_box(args)
       add(ComboBox.new(args))
     end
+
+    def table(*args, &block)
+      add(Table.new(*args, &block))
+    end
+
+    def tbl_head(*args, &block)
+      add(TblHead.new(*args, &block))
+    end
+
+    def tbl_body(*args, &block)
+      add(TblBody.new(*args, &block))
+    end
   end
 end
 

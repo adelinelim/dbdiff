@@ -1,15 +1,16 @@
 <link rel="stylesheet" href="css/new_diff_table.scss" type="text/css" />
+<link rel="stylesheet" href="css/add_connection.scss" type="text/css" />
 <script src="javascript/jquery.min.js" type="text/javascript"></script>
 <script src="javascript/add_connection_view.js" type="text/javascript"></script>
 
-<form action="/add" method="get" class="add_connection_view">
+<form action="/add" method="get">
   <div><h2>Database Connection:</h2></div>
   <div>
-    <span>Name:</span>
-    <input type="text" id="name" name="name" required>
+    <label>Name:</label>
+    <input type="text" id="name" name="name" required class="input-text">
   </div>
   <div>
-    <span>Adapter:</span>
+    <label>Adapter:</label>
     <select id="adapter_select">
       <option value='pg' selected>pg</option>
       <option value='mysql'>mysql</option>
@@ -17,24 +18,24 @@
     <input type="hidden" id="adapter" name="adapter">
   </div>
   <div>
-    <span>Host:</span>
-    <input type="text" id="host" name="host" placeholder="optional">
+    <label>Host:</label>
+    <input type="text" id="host" name="host" placeholder="optional"  class="input-text">
   </div>
   <div>
-    <span>Username:</span>
-    <input type="text" id="username" name="username" placeholder="optional">
+    <label>Username:</label>
+    <input type="text" id="username" name="username" placeholder="optional" class="input-text">
   </div>
   <div>
-    <span>Password:</span>
-    <input type="text" id="password" name="password" placeholder="optional">
+    <label>Password:</label>
+    <input type="text" id="password" name="password" placeholder="optional" class="input-text">
   </div>
   <div>
-    <span>Database:</span>
-    <input type="text" id="database" name="database" required>
+    <label>Database:</label>
+    <input type="text" id="database" name="database" required class="input-text">
   </div>
   <div>
-    <span>Port:</span>
-    <input type="text" id="port" name="port" placeholder="optional">
+    <label>Port:</label>
+    <input type="text" id="port" name="port" placeholder="optional" class="input-text">
   </div>
   <div class="buttons-group">
     <a href="/setup" id="setup" class="btn-submit">Back</a>

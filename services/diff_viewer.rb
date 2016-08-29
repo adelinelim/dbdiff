@@ -28,19 +28,17 @@ module Services
     def display_no_changes
       Components::Div.new(class: "table-title") do |d|
         d.tag(tag: "h3", content: "No changes")
-      end
+      end.render
     end
 
     def display_diff
       display = ""
       @diff_data.each do |table, value|
         value.each do |action_key, action_val|
-          display += %[
-            <div class="table-title">
-              <h3>#{table}</h3>
-              <div class="sub-title">#{action_key.capitalize}</div>
-            </div>
-          ]
+          display += Components::Div.new(class: "table-title") do |d|
+            d.tag(tag: "h3", content: table)
+            d.div(class: "sub-title", content: action_key.capitalize)
+          end.render
 
           headers = ""
           rows = ""
@@ -52,19 +50,7 @@ module Services
             rows = addition_deletion_rows(action_val)
           end
 
-          display += %[
-            <table class="table-fill">
-              <thead>
-              <tr>
-              #{headers}
-              </tr>
-              </thead>
-
-              <tbody class="table-hover">
-              #{rows}
-              </tbody>
-            </table>
-          ]
+          display += Components::Table.new(class: "table-fill", thead: headers, tbody: rows).render
         end
       end
       display
@@ -73,16 +59,22 @@ module Services
     def modification_headers(data)
       headers = ""
       data.first.keys.each do |column_name|
-        headers += %[
-          <th class="text-left">
-          #{(column_name == :row_modification)? "column names" : column_name}
-          </th>
-        ]
+        headers += generate_table_header(column_name == :row_modification ? "column names" : column_name)
       end
-      headers += %[
-        <th class="text-left">from</th>
-        <th class="text-left">to</th>
-      ]
+      headers += generate_table_header("from")
+      headers += generate_table_header("to")
+    end
+
+    def generate_table_header(content)
+      Components::TableHeader.new(class: "text-left", content: content).render
+    end
+
+    def generate_table_data(content)
+      Components::TableData.new(class: "text-left", content: content).render
+    end
+
+    def generate_open_tag_table_data
+      %[<td class="text-left">]
     end
 
     def modification_rows(data)
@@ -92,14 +84,14 @@ module Services
         row.each_with_index do |value, i|
           if i == 0
             # column names
-            rows += %[ <td class="text-left">#{value[1]}</td> ]
+            rows += generate_table_data(value[1])
           else
             # row_modification
             line = value[i]
 
             #column values
             counter = 0
-            rows += %[<td class="text-left">]
+            rows += generate_open_tag_table_data
             rows += line.map do |k, v|
               counter += 1
               bold_even_line(counter, k)
@@ -107,8 +99,8 @@ module Services
             rows += "</td>"
 
             # from and to values
-            from_data = %[<td class="text-left">]
-            to_data = %[<td class="text-left">]
+            from_data = generate_open_tag_table_data
+            to_data = generate_open_tag_table_data
 
             counter = 0
             line.each do |k, v|
@@ -140,7 +132,7 @@ module Services
     def addition_deletion_headers(action_val)
       headers = ""
       action_val.first.keys.each do |column_name|
-        headers += %[ <th class="text-left">#{column_name}</th> ]
+        headers += generate_table_header(column_name)
       end
       headers
     end
@@ -150,7 +142,7 @@ module Services
       action_val.each do |row|
         rows += "<tr>"
         row.each do |k, v|
-          rows += %[ <td class="text-left">#{v}</td> ]
+          rows += generate_table_data(v)
         end
         rows += "</tr>"
       end

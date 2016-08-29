@@ -3,12 +3,14 @@ module Components
     def initialize(options = {})
       super
       @content = options[:content] || ""
-      @attributes = options[:attributes] || options
+      @attributes = options[:attributes] || options.except(:content)
     end
 
     def render
       "<form#{render_attributes}>#{@content}#{render_children}</form>"
     end
+
+    private
 
     def render_attributes
       @attributes.map do |k, v|
