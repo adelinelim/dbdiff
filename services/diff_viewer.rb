@@ -37,7 +37,6 @@ module Services
         value.each do |action_key, action_val|
           display += Components::Div.new(class: "table-title") do |d|
             d.tag(tag: "h3", content: table)
-            d.div(class: "sub-title", content: action_key.capitalize)
           end.render
 
           headers = ""

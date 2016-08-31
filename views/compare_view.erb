@@ -1,14 +1,51 @@
 <link rel="stylesheet" href="css/new_diff_table.scss" type="text/css" />
 <link rel="stylesheet" href="css/new_table.scss" type="text/css" />
-<div class="table-title">
-  <% if file_names.present? %>
-    Compare File: <b><%=file_names.first_file%></b> and File: <b><%=file_names.second_file%></b>
-  <% end %>
-</div>
-<input type="hidden" id="cid" name="cid" value='<%=diff_data.cid%>'>
-<div class="buttons-group">
-  <a href="/setup" id="setup" class="btn-submit">Back</a>
-  <a href="/compare?<%=diff_data.encoded_params%>" class="btn-submit back">Compare</a>
-</div>
+<table>
+  <tr>
+    <td class="no-border">
 
+      <div class="table-title">
+        <% if file_names.present? %>
+          Compare File: <b><%=file_names.first_file%></b> and File: <b><%=file_names.second_file%></b>
+        <% end %>
+      </div>
+      <input type="hidden" id="cid" name="cid" value='<%=diff_data.cid%>'>
+      <div class="buttons-group">
+        <a href="/setup" id="setup" class="btn-submit">Back</a>
+        <a href="/compare?<%=diff_data.encoded_params%>" class="btn-submit back">Compare</a>
+      </div>
+
+    </td>
+    <td class="no-border gap">
+
+      <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Color</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tr>
+          <td class="modification">&nbsp;&nbsp;</td>
+          <td>Modification</td>
+        </tr>
+        <tr>
+          <td class="addition">&nbsp;&nbsp;</td>
+          <td>Addition</td>
+        </tr>
+        <tr>
+          <td class="deletion">&nbsp;&nbsp;</td>
+          <td>Deletion</td>
+        </tr>
+      </table>
+      </div>
+
+    </td>
+  </tr>
+</table>
+
+<div>
+  <h3>Differences:</h3>
+</div>
 <%= table_data_diff %>

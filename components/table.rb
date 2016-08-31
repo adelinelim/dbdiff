@@ -7,11 +7,7 @@ module Components
     end
 
     def render
-      test = render_children
-      if test == ""
-        binding.pry
-      end
-      "<table#{render_attributes}>#{@content}#{test}</table>"
+      "<table#{render_attributes}>#{@content}#{render_children}</table>"
     end
 
     private
