@@ -50,7 +50,10 @@ module Services
             rows = addition_deletion_rows(action_val)
           end
 
-          display += Components::Table.new(class: "table-fill", thead: headers, tbody: rows).render
+          display += Components::Table.new(class: "table-fill") do |tbl|
+            tbl.table_header(content: headers)
+            tbl.table_body(class: action_key, content: rows)
+          end.render
         end
       end
       display
@@ -66,11 +69,11 @@ module Services
     end
 
     def generate_table_header(content)
-      Components::TableHeader.new(class: "text-left", content: content).render
+      Components::TableHeaderData.new(class: "text-left", content: content).render
     end
 
     def generate_table_data(content)
-      Components::TableData.new(class: "text-left", content: content).render
+      Components::TableBodyData.new(class: "text-left", content: content).render
     end
 
     def generate_open_tag_table_data

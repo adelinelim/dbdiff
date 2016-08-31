@@ -7,7 +7,10 @@ module Components
     end
 
     def render
-      "<th#{render_attributes}>#{@content}</th>"
+      if @content == ""
+        binding.pry
+      end
+      "<thead><tr><th#{render_attributes}>#{@content}</th></tr></thead>"
     end
 
     def render_attributes

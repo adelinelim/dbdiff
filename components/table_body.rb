@@ -1,5 +1,5 @@
 module Components
-  class TableData < BaseComponent
+  class TableBody < BaseComponent
     def initialize(options = {})
       super
       @content = options[:content] || ""
@@ -7,7 +7,7 @@ module Components
     end
 
     def render
-      "<td#{render_attributes}>#{@content}</td>"
+      "<tbody#{render_attributes}>#{@content}</tbody>"
     end
 
     def render_attributes

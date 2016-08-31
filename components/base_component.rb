@@ -54,12 +54,20 @@ module Components
       add(Table.new(*args, &block))
     end
 
-    def tbl_head(*args, &block)
-      add(TblHead.new(*args, &block))
+    def table_header(*args, &block)
+      add(TableHeader.new(*args, &block))
     end
 
-    def tbl_body(*args, &block)
-      add(TblBody.new(*args, &block))
+    def table_header_data(*args, &block)
+      add(TableHeaderData.new(*args, &block))
+    end
+
+    def table_body(*args, &block)
+      add(TableBody.new(*args, &block))
+    end
+
+    def table_body_data(*args, &block)
+      add(TableBodyData.new(*args, &block))
     end
   end
 end

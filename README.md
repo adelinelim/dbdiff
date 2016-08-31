@@ -9,12 +9,12 @@ DBDiff supports these database adapters:
 
 # Usage
   1. Run the below command in terminal to start dbdiff,
-  which internally it will run **bundle install** and **ruby dbdiff.rb**
+  which internally it run **bundle install** and **ruby dbdiff.rb**
   ```
   ./run
   ```
 
-  2. When the Sinatra service is running, open the browser with the link:
+  2. When the service start, open the browser
   ```
   http://localhost:4567/setup
   ```
@@ -24,11 +24,11 @@ DBDiff supports these database adapters:
   Fill in the database connection detail and click **Add** button.
   The database connection will be added to config/databases.json
 
-  4. Once the database connection is added, you can then go back to the [setup page](http://localhost:4567/setup) and select the "Database Name" that you want the data comparison and click **Compare** button to proceed.
+  4. Once the database connection is added, you can then go back to the [setup page](http://localhost:4567/setup) and select the "Database Name" that you want to compare and click **Compare** button to proceed.
 
-  5. You can now view the data differences after some CRUD actions to the database.
+  5. Data comparison results will be display after some CRUD actions to the database.
 
-  6. You can press refresh (**command + R**) or click **Compare** button again to compare the data continuously.
+  6. Press refresh (**command + R**) or click **Compare** button again to compare the data continuously.
 
   **Note:** For the first time, in order to compare differences between before and after some actions, you will need to click Compare button again to generate another data json file to start the data comparison.
 

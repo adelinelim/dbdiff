@@ -24,7 +24,11 @@ module Configuration
     end
 
     def self.read
-      File.read(DATABASE_CONFIG_FILE_PATH).to_data
+      if File.exist?(DATABASE_CONFIG_FILE_PATH)
+        File.read(DATABASE_CONFIG_FILE_PATH).to_data
+      else
+        {}
+      end
     end
 
     def self.write(data)
