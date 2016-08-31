@@ -14,7 +14,7 @@ DBDiff supports these database adapters:
   ./run
   ```
 
-  2. When the service start, open the browser
+  2. When the Sinatra server started, open the browser
   ```
   http://localhost:4567/setup
   ```
