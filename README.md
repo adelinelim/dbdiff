@@ -1,8 +1,8 @@
 # DBDiff
-  DBDiff is a tool that allows you to compare data in the database after some CRUD actions.
+DBDiff is a tool that allows developers to **compare** changes to the database's data after some actions executed.
+It allows you to view the **differences** between **before** and **after** CRUDs actions.
 
-  It is useful to **compare** the state of the data **before and after** an action has been taken.
-
+# Supports:
 DBDiff supports these database adapters:
 - **mysql**
 - **postgres**
@@ -22,20 +22,20 @@ DBDiff supports these database adapters:
   3. Click **Add Connection** button to add a database connection.
 
   Fill in the database connection detail and click **Add** button.
-  The database connection will be added to config/databases.json
+  The database configuration details will be added to config/databases.json
 
-  4. Once the database connection is added, you can then go back to the [setup page](http://localhost:4567/setup) and select the "Database Name" that you want to compare and click **Compare** button to proceed.
+  4. Once the database connection is added, you can then go back to the [setup page](http://localhost:4567/setup) and select the "Database Name" that you want to compare and click **Compare** button to start the data comparison.
 
-  5. Data comparison results will be display after some CRUD actions to the database.
+  5. Data comparison results will be displayed after some CRUD actions to the database.
 
   6. Press refresh (**command + R**) or click **Compare** button again to compare the data continuously.
 
-  **Note:** For the first time, in order to compare differences between before and after some actions, you will need to click Compare button again to generate another data json file to start the data comparison.
+  **Note:** For the first time, in order to compare differences between before and after some actions, you will need to click Compare button again to generate another data JSON file to start the data comparison.
 
 # How it works
 1. Every time the "**Compare**" button is clicked in the /compare page, it will write all the data from the database into <.filenumber>.json file.
 
-  The file number counter is auto generated and stored in .filenumber file.
+  The file number counter is auto generated and stored in the .filenumber file.
 
 2.  DBdiff will always compares the last two <.filenumber>.json files (located at data/*.json folder) to generate the data differences result into data/diff.json.
 
@@ -49,7 +49,3 @@ DBDiff supports these database adapters:
   ```
 
   **Note:** You can delete unwanted json data files in /data/<.filenumber>.json file
-
-## Limitation
-  1. Slow in processing large data
-  2. Display differences in a better layout
