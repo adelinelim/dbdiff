@@ -1,3 +1,4 @@
 data/*.json
 .filenumber
 config/databases.json
+.bundle/*

@@ -1,12 +1,8 @@
 source "https://rubygems.org"
 gem "sinatra"
-gem "mysql2", "~> 0.3.20"
+gem "mysql2", "0.3.20"
 gem "sinatra-contrib"
 gem "pry"
 gem "activesupport"
 gem "pg"
 gem "hashie"
-# gem "haml"
-# gem "arbre"
-
-# gem "actionview"
