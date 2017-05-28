@@ -16,6 +16,14 @@ get "/add" do
   end
 end
 
+get "/clear_data" do
+  Dir[File.dirname(__FILE__) + "/data/*.json"].each do |file|
+    "deleting #{file}"
+    File.delete(file)
+  end
+  redirect "/setup"
+end
+
 get "/setup" do
   all_dbs_config = Configuration::DatabaseConfigFile.read
   all_databases_select_tag = Components::ComboBox.new(

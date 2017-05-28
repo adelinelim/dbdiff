@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 gem "sinatra"
-gem "mysql2", "0.3.20"
+gem "mysql2", "0.4.6"
 gem "sinatra-contrib"
 gem "pry"
 gem "activesupport"
