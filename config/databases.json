@@ -1,12 +1,6 @@
 {
-  "testdb_pg": {
+  "fs": {
     "adapter": "pg",
-    "database": "testdb"
-  },
-  "fulcrum_mysql": {
-    "adapter": "mysql",
-    "database": "fulcrum_development",
-    "host": "localhost",
-    "username": "root"
+    "database": "fs"
   }
 }

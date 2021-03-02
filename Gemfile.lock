@@ -14,7 +14,6 @@ GEM
     method_source (0.8.2)
     minitest (5.9.1)
     multi_json (1.12.1)
-    mysql2 (0.4.6)
     pg (0.19.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
@@ -48,11 +47,13 @@ PLATFORMS
 DEPENDENCIES
   activesupport
   hashie
-  mysql2 (= 0.4.6)
   pg
   pry
   sinatra
   sinatra-contrib
 
+RUBY VERSION
+   ruby 2.4.5p335
+
 BUNDLED WITH
-   1.14.6
+   1.17.3

@@ -1,4 +1,4 @@
-require "mysql2"
+# require "mysql2"
 require "pry"
 require "rubygems"
 require "bundler/setup"
@@ -11,7 +11,7 @@ Dir[File.dirname(__FILE__) + "/core_ext/*.rb"].each do |file|
   require_relative file
 end
 
-Dir[File.dirname(__FILE__) + "/components/*.rb"].each do |file|
+Dir[File.dirname(__FILE__) + "/components/*.rb"].sort.each do |file|
   require_relative file
 end
 
