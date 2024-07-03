@@ -20,7 +20,7 @@ module Services
     end
 
     def encode(value)
-      URI::encode(value)
+      URI::DEFAULT_PARSER.escape(value)
     end
   end
 end

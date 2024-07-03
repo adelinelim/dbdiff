@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.7.2'
+ruby '3.3.1'
 
 gem "sinatra"
 # gem "mysql2", "0.4.6"
@@ -9,3 +9,4 @@ gem "pry"
 gem "activesupport"
 gem "pg"
 gem "hashie"
+gem "rackup"
